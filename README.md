@@ -1,5 +1,7 @@
 # RCABench Leaderboard
 
+**Language:** English | [简体中文](README.zh-CN.md)
+
 Reproducible CI/CD for all 12 algorithms reported by the FSE paper on FSE
 RCABench and OPS-Lite. The repository pins every algorithm commit and dataset revision,
 executes each datapack in Docker, calculates one canonical metric schema, and
