@@ -113,3 +113,29 @@ rcabench-leaderboard prepare eadro --snapshot .cache/datasets/v1.0.0
 
 See [docs/SETUP.zh-CN.md](docs/SETUP.zh-CN.md) for deployment and recovery, and
 [docs/DATASET_PR.zh-CN.md](docs/DATASET_PR.zh-CN.md) for the generic dataset PR flow.
+
+For maintainers who are joining the project, the shortest path from a clean
+checkout to a reproducible run is documented in
+[docs/DEVELOPMENT.zh-CN.md](docs/DEVELOPMENT.zh-CN.md). It covers repository
+boundaries, local reproduction, new algorithm and dataset development, and the
+manual Actions entry points.
+
+## Repository move
+
+The canonical home is being prepared as
+`OperationsPAI/rcabench-leaderboard`. GitHub preserves the old
+`HamsterStation/rcabench-leaderboard` URL as a redirect after an organization
+transfer, but scripts and citations should use the new URL once the transfer is
+confirmed. The benchmark data repository and any server storage remain separate;
+moving this repository does not copy datasets, caches, checkpoints, or prior
+results.
+
+## What is public
+
+This repository publishes the evaluation controller, immutable algorithm
+references, metric history, and the static leaderboard. The paper's modified
+Train-Ticket microservice image archive and a complete digest manifest are not
+currently part of this repository. Do not substitute the RCA algorithm images
+listed in `config/algorithms.json` for Train-Ticket service images; publish a
+redacted manifest and fixed deployment revision only after the corresponding
+artifact and license checks are complete.
