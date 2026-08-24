@@ -1,5 +1,7 @@
 # RCABench Leaderboard
 
+**Language:** English | [简体中文](README.zh-CN.md)
+
 Reproducible CI/CD for all 12 algorithms reported by the FSE paper on FSE
 RCABench and OPS-Lite. The repository pins every algorithm commit and dataset revision,
 executes each datapack in Docker, calculates one canonical metric schema, and
@@ -122,8 +124,8 @@ manual Actions entry points.
 
 ## Repository move
 
-The canonical home is being prepared as
-`OperationsPAI/rcabench-leaderboard`. GitHub preserves the old
+The canonical home is now
+`LGU-SE-Internal/rcabench-leaderboard`. GitHub preserves the old
 `HamsterStation/rcabench-leaderboard` URL as a redirect after an organization
 transfer, but scripts and citations should use the new URL once the transfer is
 confirmed. The benchmark data repository and any server storage remain separate;
