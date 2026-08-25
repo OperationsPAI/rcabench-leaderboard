@@ -74,7 +74,7 @@ docker info
 
 ```bash
 ./config.sh \
-  --url https://github.com/HamsterStation/rcabench-leaderboard \
+  --url https://github.com/OperationsPAI/rcabench-leaderboard \
   --token '<GitHub 页面生成的一次性 token>' \
   --name fse-10.26.1.187 \
   --labels rcabench \
@@ -141,7 +141,7 @@ checkpoint 缓存在服务器 `$HOME/.cache/rcabench/assets/`，不用提交到 
 
 ```bash
 gh api --method POST \
-  repos/HamsterStation/rcabench-leaderboard/dispatches \
+  repos/OperationsPAI/rcabench-leaderboard/dispatches \
   -f event_type=dataset-updated
 ```
 

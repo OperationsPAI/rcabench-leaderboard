@@ -2,7 +2,7 @@
 
 本文给新维护者一条可审计的路径：先在本地检查配置，再通过 PR 让受信任的
 self-hosted runner 评测，最后由机器人归档指标并发布 Pages。仓库迁移到
-`LGU-SE-Internal/rcabench-leaderboard` 后，下面的命令只需替换 `REPO` 变量；旧
+`OperationsPAI/rcabench-leaderboard` 后，下面的命令只需替换 `REPO` 变量；旧
 仓库地址在 GitHub 转移完成后仍会重定向。
 
 ## 1. 仓库边界
@@ -23,7 +23,7 @@ self-hosted runner 评测，最后由机器人归档指标并发布 Pages。仓�
 ## 2. 本地安装与最小复现
 
 ```bash
-git clone https://github.com/LGU-SE-Internal/rcabench-leaderboard.git
+git clone https://github.com/OperationsPAI/rcabench-leaderboard.git
 cd rcabench-leaderboard
 python -m venv .venv
 source .venv/bin/activate
@@ -111,7 +111,7 @@ Git 只提交配置、清单和校验信息；`all/train/test` 必须无重复�
 self-hosted runner 和 GHCR 读取权限。以下命令默认使用 `main`：
 
 ```bash
-REPO=LGU-SE-Internal/rcabench-leaderboard
+REPO=OperationsPAI/rcabench-leaderboard
 
 # 完整评测，或只跑指定 benchmark/algorithm（逗号分隔）
 gh workflow run benchmark.yml --repo "$REPO" --ref main \

@@ -45,7 +45,7 @@ MicroRank、MicroRCA、Nezha、ShapleyIQ 和 SimpleRCA。DiagFusion 使用上游
 ## 本地安装与复现
 
 ```bash
-git clone https://github.com/LGU-SE-Internal/rcabench-leaderboard.git
+git clone https://github.com/OperationsPAI/rcabench-leaderboard.git
 cd rcabench-leaderboard
 python -m venv .venv
 source .venv/bin/activate
@@ -109,7 +109,7 @@ rcabench-leaderboard normalize --adapter native \
 ## 手动触发 Actions
 
 ```bash
-REPO=LGU-SE-Internal/rcabench-leaderboard
+REPO=OperationsPAI/rcabench-leaderboard
 
 # 完整或选定评测
 gh workflow run benchmark.yml --repo "$REPO" --ref main \
@@ -154,9 +154,8 @@ HF cache、checkpoint、smoke 输出、Redis/JuiceFS 元数据或恢复日志。
 
 ## 组织与制品状态
 
-仓库现位于 `LGU-SE-Internal/rcabench-leaderboard`，旧的
-`HamsterStation/rcabench-leaderboard` 地址会重定向。仓库迁移不会复制 HF 数据、缓存、
-checkpoint 或历史结果。
+仓库现位于 `OperationsPAI/rcabench-leaderboard`，之前的仓库地址会重定向。
+仓库迁移不会复制 HF 数据、缓存、checkpoint 或历史结果。
 
 当前公开的是评测控制器、算法 commit/tag、配置、指标历史和排行榜。论文所用修改版
 Train-Ticket 微服务镜像、完整 digest manifest、固定 Train-Ticket commit 以及脱敏
