@@ -135,6 +135,9 @@ gh workflow run import-server-results.yml --repo "$REPO" --ref main \
 
 # 仅重新构建并发布 Pages
 gh workflow run pages.yml --repo "$REPO" --ref main
+
+# 迁移或维护后做只读 runner 健康检查（不执行算法、不修改已有结果）
+gh workflow run runner-health.yml --repo "$REPO" --ref main
 ```
 
 也可以用 repository dispatch 触发选定项目：
@@ -156,6 +159,10 @@ gh run watch <RUN_ID> --repo "$REPO"
 `benchmark.yml` 的评测矩阵 `max-parallel: 1`，长时间等待是预期行为；PR 评测
 可运行数小时。不要因为 Actions 页面暂时显示 queued 就删除服务器缓存或重启
 Docker。
+
+`runner-health.yml` 会验证 runner 接单、Python、Docker、存储、FSE manifest、
+Hugging Face token 和全部已登记 GHCR 镜像的读取权限。它只读取现有资源，不下载
+数据、不执行算法，也不修改服务器中的 `result.json`、metrics 或 checkpoint。
 
 ## 6. Runner、权限与恢复
 

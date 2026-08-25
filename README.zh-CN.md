@@ -127,6 +127,9 @@ gh workflow run upstream-watch.yml --repo "$REPO" --ref main
 gh workflow run import-server-results.yml --repo "$REPO" --ref main \
   -f run_root=/mnt/jfs-fixed/ops-lite-runs/seed42
 gh workflow run pages.yml --repo "$REPO" --ref main
+
+# 只读检查学校 runner、存储、HF 和 GHCR，不执行算法
+gh workflow run runner-health.yml --repo "$REPO" --ref main
 ```
 
 查看运行状态：
