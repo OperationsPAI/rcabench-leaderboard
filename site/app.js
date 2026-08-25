@@ -1,5 +1,5 @@
 const metricKeys = new Set(["top@1", "top@3", "top@5", "avg@3", "avg@5", "mrr", "average_algorithm_seconds"]);
-const repositoryUrl = "https://github.com/HamsterStation/rcabench-leaderboard";
+const repositoryUrl = "https://github.com/OperationsPAI/rcabench-leaderboard";
 
 const state = {
   boards: [],

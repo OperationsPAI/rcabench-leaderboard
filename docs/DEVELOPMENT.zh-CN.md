@@ -2,7 +2,7 @@
 
 本文给新维护者一条可审计的路径：先在本地检查配置，再通过 PR 让受信任的
 self-hosted runner 评测，最后由机器人归档指标并发布 Pages。仓库迁移到
-`LGU-SE-Internal/rcabench-leaderboard` 后，下面的命令只需替换 `REPO` 变量；旧
+`OperationsPAI/rcabench-leaderboard` 后，下面的命令只需替换 `REPO` 变量；旧
 仓库地址在 GitHub 转移完成后仍会重定向。
 
 ## 1. 仓库边界
@@ -23,7 +23,7 @@ self-hosted runner 评测，最后由机器人归档指标并发布 Pages。仓�
 ## 2. 本地安装与最小复现
 
 ```bash
-git clone https://github.com/LGU-SE-Internal/rcabench-leaderboard.git
+git clone https://github.com/OperationsPAI/rcabench-leaderboard.git
 cd rcabench-leaderboard
 python -m venv .venv
 source .venv/bin/activate
@@ -111,7 +111,7 @@ Git 只提交配置、清单和校验信息；`all/train/test` 必须无重复�
 self-hosted runner 和 GHCR 读取权限。以下命令默认使用 `main`：
 
 ```bash
-REPO=LGU-SE-Internal/rcabench-leaderboard
+REPO=OperationsPAI/rcabench-leaderboard
 
 # 完整评测，或只跑指定 benchmark/algorithm（逗号分隔）
 gh workflow run benchmark.yml --repo "$REPO" --ref main \
@@ -135,6 +135,9 @@ gh workflow run import-server-results.yml --repo "$REPO" --ref main \
 
 # 仅重新构建并发布 Pages
 gh workflow run pages.yml --repo "$REPO" --ref main
+
+# 迁移或维护后做只读 runner 健康检查（不执行算法、不修改已有结果）
+gh workflow run runner-health.yml --repo "$REPO" --ref main
 ```
 
 也可以用 repository dispatch 触发选定项目：
@@ -156,6 +159,10 @@ gh run watch <RUN_ID> --repo "$REPO"
 `benchmark.yml` 的评测矩阵 `max-parallel: 1`，长时间等待是预期行为；PR 评测
 可运行数小时。不要因为 Actions 页面暂时显示 queued 就删除服务器缓存或重启
 Docker。
+
+`runner-health.yml` 会验证 runner 接单、Python、Docker、存储、FSE manifest、
+Hugging Face token 和全部已登记 GHCR 镜像的读取权限。它只读取现有资源，不下载
+数据、不执行算法，也不修改服务器中的 `result.json`、metrics 或 checkpoint。
 
 ## 6. Runner、权限与恢复
 

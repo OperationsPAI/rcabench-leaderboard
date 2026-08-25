@@ -1,0 +1,104 @@
+name: Check benchmark runner
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: runner-health
+  cancel-in-progress: false
+
+env:
+  RCABENCH_STORAGE: ${{ vars.RCABENCH_STORAGE || '/mnt/jfs-fixed/rcabench-ci' }}
+
+jobs:
+  health:
+    timeout-minutes: 15
+    runs-on: [self-hosted, linux, x64, rcabench]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check runner tools and storage
+        env:
+          BASE_PYTHON: ${{ vars.RCABENCH_PYTHON || '/mnt/jfs-fixed/rcabench-venv/bin/python' }}
+          FSE_DATA_ROOT: ${{ vars.RCABENCH_FSE_DATA_ROOT }}
+          FSE_MANIFESTS: ${{ vars.RCABENCH_FSE_MANIFESTS }}
+          RUN_STORAGE: ${{ vars.RCABENCH_RUN_STORAGE || vars.RCABENCH_STORAGE || '/mnt/jfs-fixed/rcabench-ci' }}
+          CACHE_STORAGE: ${{ vars.RCABENCH_CACHE_STORAGE || vars.RCABENCH_RUN_STORAGE || '/var/tmp/rcabench-ci' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ -x "$BASE_PYTHON" ]] || { echo "Missing runner Python: $BASE_PYTHON" >&2; exit 1; }
+          "$BASE_PYTHON" --version
+          docker info --format 'Docker {{.ServerVersion}} on {{.Architecture}}'
+
+          for path in "$RCABENCH_STORAGE" "$RUN_STORAGE" "$CACHE_STORAGE"; do
+            [[ -d "$path" && -r "$path" ]] || {
+              echo "Required storage is unavailable: $path" >&2
+              exit 1
+            }
+          done
+
+          [[ -d "$FSE_DATA_ROOT" && -d "$FSE_MANIFESTS" ]] || {
+            echo 'FSE data or manifest directory is unavailable' >&2
+            exit 1
+          }
+          for split in all train test; do
+            [[ -s "$FSE_MANIFESTS/$split.txt" ]] || {
+              echo "Missing FSE manifest: $split.txt" >&2
+              exit 1
+            }
+          done
+
+          [[ "$(awk 'NF { count += 1 } END { print count + 0 }' "$FSE_MANIFESTS/all.txt")" -eq 1422 ]]
+          [[ "$(awk 'NF { count += 1 } END { print count + 0 }' "$FSE_MANIFESTS/train.txt")" -eq 1126 ]]
+          [[ "$(awk 'NF { count += 1 } END { print count + 0 }' "$FSE_MANIFESTS/test.txt")" -eq 296 ]]
+
+          PYTHONPATH=src "$BASE_PYTHON" -m rcabench_leaderboard.matrix benchmarks \
+            --benchmarks all --algorithms all >/dev/null
+          df -h "$RCABENCH_STORAGE" "$RUN_STORAGE" "$CACHE_STORAGE"
+
+      - name: Check Hugging Face access
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ -n "$HF_TOKEN" ]] || { echo 'HF_TOKEN is unavailable' >&2; exit 1; }
+          curl --fail --silent --show-error --location \
+            --header "Authorization: Bearer $HF_TOKEN" \
+            'https://huggingface.co/api/datasets/HamsterStation/rcabench-fse/revision/v1.0.0' \
+            --output /dev/null
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check every registered algorithm image
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          while IFS= read -r image; do
+            echo "Checking $image"
+            docker manifest inspect "$image" >/dev/null
+          done < <(jq -r '.images[].image' config/algorithms.json | sort -u)
+
+      - name: Report healthy runner
+        shell: bash
+        run: |
+          {
+            echo '## Benchmark runner health'
+            echo
+            echo '- Self-hosted runner accepted the job.'
+            echo '- Python, Docker, and configured storage are available.'
+            echo '- FSE manifests have the expected 1422/1126/296 cases.'
+            echo '- Hugging Face authentication succeeded.'
+            echo '- Every registered GHCR image is readable.'
+            echo '- No benchmark cases were executed and no stored results were changed.'
+          } >> "$GITHUB_STEP_SUMMARY"

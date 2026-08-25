@@ -125,10 +125,9 @@ manual Actions entry points.
 ## Repository move
 
 The canonical home is now
-`LGU-SE-Internal/rcabench-leaderboard`. GitHub preserves the old
-`HamsterStation/rcabench-leaderboard` URL as a redirect after an organization
-transfer, but scripts and citations should use the new URL once the transfer is
-confirmed. The benchmark data repository and any server storage remain separate;
+`OperationsPAI/rcabench-leaderboard`. GitHub preserves the previous repository
+URLs as redirects after an organization transfer, but scripts and citations
+should use the canonical URL. The benchmark data repository and any server storage remain separate;
 moving this repository does not copy datasets, caches, checkpoints, or prior
 results.
 
