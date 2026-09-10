@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="RCABench 服务级根因分析排行榜：固定数据版本，统一评测协议，追溯每一次算法运行。">
+    <meta name="description" content="RCABench service-level root cause analysis leaderboard: pinned datasets, a shared evaluation protocol, and traceable algorithm runs.">
     <meta name="theme-color" content="#f2f0e8">
-    <title>算法排行榜 · RCABench</title>
+    <title>Algorithm Leaderboard · RCABench</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +13,15 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <a class="skip-link" href="#leaderboard">跳到排行榜</a>
+    <a class="skip-link" href="#leaderboard">Skip to leaderboard</a>
     <header class="site-header shell">
-      <a class="brand" href="./" aria-label="RCABench 首页">
+      <a class="brand" href="./" aria-label="RCABench home">
         <span class="brand-mark" aria-hidden="true">r/c</span>
         <span>rcabench<span class="brand-light">—leaderboard</span><small>ROOT CAUSE ANALYSIS / OPEN EVALUATION</small></span>
       </a>
-      <nav aria-label="主导航">
-        <a href="#leaderboard">算法排行榜</a>
-        <a href="#methodology">评测协议</a>
+      <nav aria-label="Main navigation">
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#methodology">Methodology</a>
         <a href="https://github.com/OperationsPAI/rcabench-leaderboard">GitHub ↗</a>
       </nav>
     </header>
@@ -30,83 +30,83 @@
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-copy">
           <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> A REPRODUCIBLE RCA BENCHMARK</p>
-          <h1 id="page-title">定位根因，<br><em>从可复现开始。</em></h1>
-          <p class="hero-description">固定数据版本与算法提交，统一服务级评测。<br>每一个分数，都能回到原始运行记录。</p>
-          <a class="text-link" href="#leaderboard">浏览算法排行榜 <span aria-hidden="true">↓</span></a>
+          <h1 id="page-title">Root causes.<br><em>Reproducible results.</em></h1>
+          <p class="hero-description">Pinned datasets and algorithm commits. One evaluation protocol.<br>Every score traces back to an archived run.</p>
+          <a class="text-link" href="#leaderboard">Explore the leaderboard <span aria-hidden="true">↓</span></a>
         </div>
-        <aside class="atlas-panel" aria-label="评测概览">
+        <aside class="atlas-panel" aria-label="Evaluation overview">
           <div class="atlas-grid" aria-hidden="true">
             <span class="axis-label">DATA → ALGORITHM → EVIDENCE</span>
             <span class="atlas-orbit orbit-one"></span><span class="atlas-orbit orbit-two"></span>
             <span class="atlas-point point-one">FSE</span><span class="atlas-point point-two">OPS-LITE</span>
-            <span class="atlas-center">根因分析的<br>评测坐标</span>
+            <span class="atlas-center">Root cause<br>research atlas</span>
           </div>
           <div class="atlas-stats">
-            <div><strong id="total-algorithms">—</strong><span>已发布算法</span></div>
-            <div><strong id="total-datasets">—</strong><span>评测数据集</span></div>
-            <div><strong id="total-cases">—</strong><span>数据集总案例</span></div>
+            <div><strong id="total-algorithms">—</strong><span>Algorithms</span></div>
+            <div><strong id="total-datasets">—</strong><span>Datasets</span></div>
+            <div><strong id="total-cases">—</strong><span>Dataset cases</span></div>
           </div>
         </aside>
       </section>
 
       <section class="catalog" id="leaderboard" aria-labelledby="leaderboard-title">
         <div class="dataset-strip">
-          <div class="dataset-heading"><p class="eyebrow">THE DATASETS</p><h2>同一协议，多维观察。</h2><p>选择数据集，查看对应结果</p></div>
-          <div id="benchmark-tabs" class="benchmark-tabs" role="tablist" aria-label="选择评测数据集"></div>
+          <div class="dataset-heading"><p class="eyebrow">THE DATASETS</p><h2>One protocol.<br>Multiple perspectives.</h2><p>Select a dataset to explore its results</p></div>
+          <div id="benchmark-tabs" class="benchmark-tabs" role="tablist" aria-label="Select evaluation dataset"></div>
         </div>
 
         <div class="section-heading">
-          <div><p class="eyebrow">THE ALGORITHM INDEX</p><h2 id="leaderboard-title">算法排行榜 <span>/ SERVICE LEVEL</span></h2></div>
-          <p id="result-count" role="status" aria-live="polite">正在加载</p>
+          <div><p class="eyebrow">THE ALGORITHM INDEX</p><h2 id="leaderboard-title">Algorithm leaderboard <span>/ SERVICE LEVEL</span></h2></div>
+          <p id="result-count" role="status" aria-live="polite">Loading</p>
         </div>
 
-        <form id="filters" role="search" aria-label="搜索与筛选算法">
+        <form id="filters" role="search" aria-label="Search and filter algorithms">
           <fieldset id="filter-controls" disabled>
-            <legend class="sr-only">排行榜筛选</legend>
+            <legend class="sr-only">Leaderboard filters</legend>
             <label class="search-field">
               <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
-              <span class="sr-only">搜索算法</span>
-              <input id="algorithm-search" type="search" placeholder="搜索算法，例如：MicroDig、BARO" autocomplete="off">
+              <span class="sr-only">Search algorithms</span>
+              <input id="algorithm-search" type="search" placeholder="Search algorithms, e.g. MicroDig, BARO" autocomplete="off">
             </label>
-            <label class="filter-label">评测范围<select id="scope-filter"><option value="">全部范围</option></select></label>
-            <label class="filter-label">排序指标<select id="sort-select"><option value="mrr">MRR</option></select></label>
-            <button class="direction-button" type="button" id="sort-direction">降序 ↓</button>
-            <button class="reset-button" type="button" id="reset-filters">重置</button>
+            <label class="filter-label">Evaluation scope<select id="scope-filter"><option value="">All scopes</option></select></label>
+            <label class="filter-label">Sort by<select id="sort-select"><option value="mrr">MRR</option></select></label>
+            <button class="direction-button" type="button" id="sort-direction">Descending ↓</button>
+            <button class="reset-button" type="button" id="reset-filters">Reset</button>
           </fieldset>
         </form>
         <div class="board-context">
           <p><strong id="board-title">—</strong><span> · revision <code id="dataset-revision">—</code></span></p>
-          <p id="sort-description">首个正确服务的倒数排名均值</p>
+          <p id="sort-description">Mean reciprocal rank of the first correct service</p>
         </div>
-        <noscript><p class="notice">排行榜需要 JavaScript。你也可以直接查看 <a href="data.json">完整指标 JSON</a>。</p></noscript>
-        <div id="load-error" class="notice" role="alert" hidden><p id="error-message"></p><button type="button" id="retry-load">重新加载</button></div>
-        <div id="results-panel" role="tabpanel" aria-label="评测结果" aria-busy="true">
-          <div class="table-wrap" tabindex="0" role="region" aria-label="算法对比表，可左右滚动">
+        <noscript><p class="notice">This leaderboard requires JavaScript. You can also view the <a href="data.json">complete metrics JSON</a>.</p></noscript>
+        <div id="load-error" class="notice" role="alert" hidden><p id="error-message"></p><button type="button" id="retry-load">Retry</button></div>
+        <div id="results-panel" role="tabpanel" aria-label="Evaluation results" aria-busy="true">
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Algorithm comparison table, scroll horizontally for more metrics">
             <table>
-              <caption class="sr-only" id="table-caption">服务级根因定位算法评测结果</caption>
+              <caption class="sr-only" id="table-caption">Service-level root cause analysis results</caption>
               <thead id="leaderboard-head"></thead>
-              <tbody id="leaderboard-body"><tr><td colspan="11" class="empty-state">正在加载已归档的评测结果…</td></tr></tbody>
+              <tbody id="leaderboard-body"><tr><td colspan="11" class="empty-state">Loading archived evaluation results…</td></tr></tbody>
             </table>
           </div>
         </div>
-        <div class="table-notes"><p>all / test 表示实际评测范围，cases 为该行指标的分母。不同范围的结果请结合协议比较。</p><span>点击表头切换排序 · 左右滑动查看完整指标</span></div>
+        <div class="table-notes"><p>all / test denotes the evaluated scope; cases is the denominator for each row. Consider the evaluation protocol when comparing different scopes.</p><span>Click a column to sort · Scroll horizontally for all metrics</span></div>
       </section>
 
       <section id="methodology" class="methodology" aria-labelledby="methodology-title">
-        <div class="section-heading"><div><p class="eyebrow">READING THE RESULTS</p><h2 id="methodology-title">理解分数，也理解边界。</h2></div><a class="text-link" href="https://github.com/OperationsPAI/rcabench-leaderboard#metric-contract">完整协议 ↗</a></div>
+        <div class="section-heading"><div><p class="eyebrow">READING THE RESULTS</p><h2 id="methodology-title">Understand the scores. Know the limits.</h2></div><a class="text-link" href="https://github.com/OperationsPAI/rcabench-leaderboard#metric-contract">Full protocol ↗</a></div>
         <div class="methodology-grid">
-          <article><span class="article-index">01 / RANKING</span><h3>正确答案，出现在哪里？</h3><p>MRR 是首个正确根因服务的倒数排名均值，越高越好。多个真实根因中，命中任意一个即可；界面以百分比展示。</p><code>MRR = mean(1 / first-hit rank)</code></article>
-          <article><span class="article-index">02 / ACCURACY</span><h3>前几个候选，能否命中？</h3><p>Top@k 表示前 k 个预测包含真实根因的案例比例。Avg@k 是 Top@1 到 Top@k 的平均值，不是另一套样本平均。</p><code>Avg@k = mean(Top@1, …, Top@k)</code></article>
-          <article><span class="article-index">03 / PROVENANCE</span><h3>结果可查，失败不隐藏。</h3><p>分母使用请求清单总数，缺失或无效结果按未命中计分。默认按服务名去重；每行附固定算法提交和归档指标。</p><a class="inline-link" href="data.json">查看完整数据 JSON ↗</a></article>
+          <article><span class="article-index">01 / RANKING</span><h3>Where does the first correct answer rank?</h3><p>MRR averages the reciprocal rank of the first correct root-cause service; higher is better. A hit on any true root cause counts. Values are displayed as percentages.</p><code>MRR = mean(1 / first-hit rank)</code></article>
+          <article><span class="article-index">02 / ACCURACY</span><h3>Is the root cause among the top candidates?</h3><p>Top@k is the fraction of cases with a true root cause among the first k predictions. Avg@k averages Top@1 through Top@k, not a separate set of samples.</p><code>Avg@k = mean(Top@1, …, Top@k)</code></article>
+          <article><span class="article-index">03 / PROVENANCE</span><h3>Traceable results. Visible failures.</h3><p>The denominator is the number of requested cases. Missing or invalid results count as misses. Predictions are deduplicated by service by default; each row includes a pinned algorithm commit and a link to archived metrics.</p><a class="inline-link" href="data.json">View complete data JSON ↗</a></article>
         </div>
-        <aside class="method-strip"><strong>每个分数，都有出处。</strong><p>ART / Eadro 使用训练资产。DiagFusion 使用上游自带 checkpoint，不应视为在新数据集上无泄漏重新训练。</p><a href="https://github.com/OperationsPAI/rcabench-leaderboard/blob/main/docs/DEVELOPMENT.zh-CN.md">开发与复现指南 ↗</a></aside>
+        <aside class="method-strip"><strong>Every score has a source.</strong><p>ART / Eadro use training assets. DiagFusion uses an upstream checkpoint and should not be treated as leakage-free retraining on the new datasets.</p><a href="https://github.com/OperationsPAI/rcabench-leaderboard/blob/main/docs/DEVELOPMENT.zh-CN.md">Development guide (Chinese) ↗</a></aside>
       </section>
-      <div class="sync-status"><span>指标快照更新：<time id="updated-at">—</time></span><span>页面展示已发布记录，不代表服务器实时运行状态。</span></div>
+      <div class="sync-status"><span>Metrics snapshot updated: <time id="updated-at">—</time></span><span>Published results only; this page does not show live server status.</span></div>
     </main>
 
     <footer class="site-footer shell">
-      <span><strong>rcabench—leaderboard</strong><br>可复现的根因分析评测与公开结果。</span>
-      <span>视觉设计沿用 <a href="https://hamsterstation.github.io/benchmark-atlas/">Benchmark Atlas ↗</a><br><a href="https://github.com/OperationsPAI/rcabench-leaderboard">源代码与算法提交指南 ↗</a></span>
+      <span><strong>rcabench—leaderboard</strong><br>Reproducible root cause analysis. Open evaluation results.</span>
+      <span>Design inspired by <a href="https://hamsterstation.github.io/benchmark-atlas/">Benchmark Atlas ↗</a><br><a href="https://github.com/OperationsPAI/rcabench-leaderboard">Source code and submission guide ↗</a></span>
     </footer>
     <script type="module" src="app.js"></script>
   </body>

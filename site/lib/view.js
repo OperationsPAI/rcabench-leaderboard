@@ -21,7 +21,7 @@ export function renderRow(entry, index, board, sortKey) {
     </th>
     <td><span class="scope-badge" title="${html(SCOPES[entry.scope] ?? entry.scope)}">${html(entry.scope ?? "—")}</span></td>
     ${METRIC_COLUMNS.map(column => `<td class="number${active(column.key)}">${formatMetric(entry.metrics[column.key], column.type)}</td>`).join("")}
-    <td>${archive ? `<a class="run-link" href="${html(archive)}" aria-label="${html(entry.display_name)} 的归档指标">记录 <span aria-hidden="true">↗</span></a>` : '<span class="muted">—</span>'}</td>
+    <td>${archive ? `<a class="run-link" href="${html(archive)}" aria-label="${html(entry.display_name)} archived metrics">Metrics <span aria-hidden="true">↗</span></a>` : '<span class="muted">—</span>'}</td>
   </tr>`;
 }
 
@@ -36,10 +36,10 @@ export function createView(document) {
   return {
     loading() {
       filters.disabled = true;
-      element("result-count").textContent = "正在加载";
+      element("result-count").textContent = "Loading";
       table.setAttribute("aria-busy", "true");
       element("load-error").hidden = true;
-      body.innerHTML = '<tr><td colspan="11" class="empty-state">正在加载已归档的评测结果…</td></tr>';
+      body.innerHTML = '<tr><td colspan="11" class="empty-state">Loading archived evaluation results…</td></tr>';
     },
 
     initialize({ boards, generatedAt }) {
@@ -58,11 +58,11 @@ export function createView(document) {
       }).join("");
       element("leaderboard-head").innerHTML = `<tr>
         <th scope="col" class="rank-column">#</th>${renderHeading(SORT_COLUMNS[0])}
-        <th scope="col" title="每行实际评测的数据范围">Scope</th>
+        <th scope="col" title="The evaluated data scope for each row">Scope</th>
         ${METRIC_COLUMNS.map(renderHeading).join("")}<th scope="col">Run</th>
       </tr>`;
       sortSelect.innerHTML = SORT_COLUMNS.map(column => `<option value="${column.key}">${column.label}</option>`).join("");
-      element("scope-filter").innerHTML = '<option value="">全部范围</option>'
+      element("scope-filter").innerHTML = '<option value="">All scopes</option>'
         + Object.entries(SCOPES).map(([key, label]) => `<option value="${key}">${label}</option>`).join("");
       filters.disabled = false;
       table.setAttribute("aria-busy", "false");
@@ -76,13 +76,13 @@ export function createView(document) {
       sortSelect.value = state.sortKey;
       element("scope-filter").value = state.scope;
       const ascending = state.sortDirection === "asc";
-      element("sort-direction").textContent = ascending ? "升序 ↑" : "降序 ↓";
-      element("sort-direction").setAttribute("aria-label", `当前${ascending ? "升序" : "降序"}，切换为${ascending ? "降序" : "升序"}`);
-      element("result-count").textContent = `显示 ${entries.length} / ${total} 个算法`;
+      element("sort-direction").textContent = ascending ? "Ascending ↑" : "Descending ↓";
+      element("sort-direction").setAttribute("aria-label", `${ascending ? "Ascending" : "Descending"} order; switch to ${ascending ? "descending" : "ascending"}`);
+      element("result-count").textContent = `Showing ${entries.length} / ${total} algorithms`;
       element("board-title").textContent = board.benchmark.title;
-      element("dataset-revision").textContent = String(board.benchmark.dataset_revision ?? "未知").slice(0, 12);
+      element("dataset-revision").textContent = String(board.benchmark.dataset_revision ?? "Unknown").slice(0, 12);
       element("dataset-revision").title = board.benchmark.dataset_revision ?? "";
-      element("table-caption").textContent = `${board.benchmark.title} 服务级根因定位算法评测结果`;
+      element("table-caption").textContent = `${board.benchmark.title} service-level root cause analysis results`;
       element("sort-description").textContent = SORT_COLUMNS.find(column => column.key === state.sortKey).description;
       document.querySelectorAll("#benchmark-tabs button").forEach((tab, index) => {
         const selected = tab.dataset.id === state.boardId;
@@ -97,16 +97,16 @@ export function createView(document) {
         heading.querySelector("span").textContent = active ? (ascending ? "↑" : "↓") : "";
       });
       body.innerHTML = entries.length ? entries.map((entry, index) => renderRow(entry, index, board, state.sortKey)).join("")
-        : `<tr><td colspan="11" class="empty-state"><strong>${total ? "没有匹配的算法" : "这个数据集暂时没有发布结果"}</strong><br>${total ? "试试其他关键词，或重置筛选条件。" : "结果通过评测与质量检查后会显示在这里。"}</td></tr>`;
+        : `<tr><td colspan="11" class="empty-state"><strong>${total ? "No matching algorithms" : "No published results for this dataset yet"}</strong><br>${total ? "Try another search or reset the filters." : "Results will appear here after evaluation and quality checks."}</td></tr>`;
     },
 
     error(message) {
       filters.disabled = true;
       table.setAttribute("aria-busy", "false");
-      element("result-count").textContent = "结果加载失败";
+      element("result-count").textContent = "Unable to load results";
       element("error-message").textContent = message;
       element("load-error").hidden = false;
-      body.innerHTML = '<tr><td colspan="11" class="empty-state">暂时无法显示排行榜，请重试。</td></tr>';
+      body.innerHTML = '<tr><td colspan="11" class="empty-state">The leaderboard is temporarily unavailable. Please retry.</td></tr>';
     },
   };
 }

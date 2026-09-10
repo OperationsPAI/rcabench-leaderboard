@@ -21,7 +21,7 @@ export function formatMetric(value, type) {
 
 export function formatDate(value) {
   const date = new Date(value ?? "");
-  return Number.isNaN(date.getTime()) ? "更新时间未知"
+  return Number.isNaN(date.getTime()) ? "Update time unknown"
     : `${date.toISOString().slice(0, 16).replace("T", " ")} UTC`;
 }
 
