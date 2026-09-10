@@ -13,12 +13,15 @@ self-hosted runner 评测，最后由机器人归档指标并发布 Pages。仓�
 | 运行器、适配器、指标 | `src/`, `containers/`, `scripts/` | 是 |
 | GitHub Actions | `.github/workflows/` | 是 |
 | 指标快照与历史 | `results/` | 是；只追加历史 |
-| 静态排行榜 | `site/` | 是；由 `build-site` 生成 |
+| 静态排行榜 | `site/` | 是；仅 `data.json` 由 `build-site` 同步，HTML/CSS/JS 为源码 |
 | 原始数据、Docker 层、训练 checkpoint、运行日志 | HF、GHCR、self-hosted runner 存储 | 否 |
 
 当前注册了 12 个 RCA 算法。算法镜像必须指向固定的算法 commit 对应的不可变
 镜像。新增或更新数据配置必须指向 40 位 Hugging Face commit SHA，不能使用
 `main`、分支或可移动 tag；历史配置中的已发布版本 tag 仅为兼容旧榜单而保留。
+
+代码模块职责和前端本地预览见 [`ARCHITECTURE.zh-CN.md`](ARCHITECTURE.zh-CN.md)。
+前端使用原生 ES modules，Node.js 22+ 只用于测试；Pages 不需要 Node 服务或打包。
 
 ## 2. 本地安装与最小复现
 

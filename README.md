@@ -35,7 +35,7 @@ original dataset redistribution terms have been confirmed.
 4. ART and Eadro training outputs are cached by algorithm commit. A new data
    revision uses a fresh cache and retrains them.
 5. Each datapack has an isolated log and atomic `result.json`; interrupted runs
-   resume from existing valid result files.
+   skip existing result files. The evaluation step then checks validity and completeness.
 6. `dataset-watch.yml` checks trusted Hugging Face repositories daily. A new
    revision regenerates deterministic splits and opens an auditable evaluation
    PR; the same PR gate runs metrics before automatic merge.
@@ -97,6 +97,32 @@ ART and Eadro require a training preparation step:
 rcabench-leaderboard prepare art --snapshot .cache/datasets/v1.0.0
 rcabench-leaderboard prepare eadro --snapshot .cache/datasets/v1.0.0
 ```
+
+## Code structure and frontend development
+
+The CLI keeps its existing commands; handlers now live in `src/rcabench_leaderboard/commands/`,
+grouped into checks, dataset preparation, benchmark execution, and publishing.
+The scoring, Docker runner, training assets, and result schemas remain unchanged.
+
+The static frontend follows the [Benchmark Atlas](https://hamsterstation.github.io/benchmark-atlas/)
+visual language. `site/app.js` coordinates interactions; `site/lib/` separates data
+selection, URL state, formatting, and DOM rendering. `site/styles/` separates design
+tokens, page layout, and the comparison table. No web server framework or frontend
+build step is required for Pages.
+
+```bash
+# Python environment from the local setup above; Node.js 22+ for frontend tests.
+pytest -q
+ruff check .
+rcabench-leaderboard build-site
+npm run check
+npm test  # Built-in Node test runner; no npm install needed.
+python -m http.server 8765 --bind 127.0.0.1 --directory site
+# Open http://localhost:8765/ (not file://).
+```
+
+See [the architecture guide](docs/ARCHITECTURE.zh-CN.md) for module responsibilities,
+extension points, test coverage, and the data-preservation contract.
 
 ## Metric contract
 
