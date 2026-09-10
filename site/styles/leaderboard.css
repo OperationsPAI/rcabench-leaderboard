@@ -1,0 +1,81 @@
+.dataset-strip { display: grid; grid-template-columns: 240px 1fr; align-items: center; gap: 24px; padding-block: 24px; border-block: 1px solid var(--line); }
+.dataset-heading .eyebrow { margin-bottom: 6px; font-size: 9px; }
+.dataset-heading h2 { font-size: 20px; }
+.dataset-heading > p:last-child { margin-top: 6px; color: var(--muted); font-size: 11px; }
+.benchmark-tabs { display: flex; gap: 12px; flex-wrap: wrap; }
+.benchmark-tabs button { display: flex; align-items: start; flex: 1 1 250px; gap: 16px; padding: 18px; text-align: left; border: 1px solid var(--line); background: transparent; }
+.benchmark-tabs button[aria-selected="true"] { background: var(--active); border-color: var(--olive); }
+.benchmark-tabs button:hover { border-color: var(--olive); }
+.dataset-index { font: 10px/2 var(--mono); color: var(--olive); }
+.benchmark-tabs strong { display: block; font: 500 15px/1.7 var(--mono); }
+.benchmark-tabs small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+.dataset-arrow { margin-left: auto; color: var(--olive); }
+#filters { padding: 20px; border: 1px solid var(--line); background: var(--filter); }
+#filter-controls { display: flex; align-items: end; gap: 18px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.search-field { display: flex; align-items: center; flex: 1; min-width: 180px; gap: 12px; padding-inline: 14px; background: var(--panel); border: 1px solid #c5cdbb; }
+.search-field svg { flex: 0 0 20px; width: 20px; height: 20px; fill: none; stroke: var(--muted); stroke-width: 1.5; }
+.search-field input { min-width: 0; width: 100%; height: 44px; padding: 0; border: 0; background: transparent; font-size: 12px; }
+.search-field input:focus { outline: none; }
+.search-field:focus-within { outline: 2px solid var(--olive); outline-offset: 2px; }
+.filter-label { display: grid; gap: 5px; color: var(--muted); font-size: 10px; }
+.filter-label select { min-height: 38px; max-width: 160px; padding: 6px 24px 6px 10px; border: 1px solid #c5cdbb; border-radius: 0; background: var(--panel); color: var(--ink); font-size: 11px; }
+.direction-button, .reset-button { padding: 10px 2px; border: 0; background: transparent; white-space: nowrap; font-size: 11px; }
+.reset-button { color: var(--muted); }
+.board-context { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding: 15px 0; color: var(--muted); font-size: 10px; }
+.board-context strong { font-weight: 500; color: var(--ink); }
+.board-context code { font-size: 10px; cursor: help; }
+.table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }
+table { width: 100%; min-width: 1080px; border-collapse: separate; border-spacing: 0; }
+th, td { white-space: nowrap; text-align: left; border-bottom: 1px solid var(--line); }
+thead th { height: 48px; padding: 0 12px; background: #ecefe3; color: var(--muted); font: 500 10px/1 var(--mono); }
+tbody td, tbody th { padding: 17px 12px; background: var(--panel); font-size: 12px; font-weight: 400; }
+tbody tr:last-child > * { border-bottom: 0; }
+tbody tr:hover > * { background: #f0f3e7; }
+.rank-column { width: 45px; padding-left: 16px; color: var(--olive); font: 11px var(--mono); }
+.algorithm-column { min-width: 165px; }
+.algorithm-name { display: block; color: var(--ink); font-size: 14px; font-weight: 600; }
+.algorithm-meta { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; }
+.algorithm-meta code { font-size: 9px; }
+.scope-badge { display: inline-flex; padding: 2px 7px; border: 1px solid var(--line); border-radius: 2px; color: var(--muted); font: 10px/1.5 var(--mono); }
+.number { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
+.sort-button { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; width: 100%; height: 48px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; }
+.algorithm-column .sort-button { justify-content: start; }
+.sort-button span { min-width: 9px; color: var(--green); }
+.active-sort { background: var(--active); color: var(--green); font-weight: 500; }
+thead th.active-sort { background: #dce7c9; box-shadow: inset 0 -2px var(--olive); }
+tbody tr:hover > .active-sort { background: #dce7c9; }
+.run-link { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; }
+.run-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.empty-state { height: 180px; padding: 28px; text-align: center; color: var(--muted); white-space: normal; }
+.empty-state strong { display: inline-block; margin-bottom: 8px; color: var(--ink); font-weight: 500; }
+.table-notes { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 20px; padding-block: 14px; color: var(--muted); font-size: 10px; }
+
+@media (max-width: 1100px) {
+  .dataset-strip { grid-template-columns: 190px 1fr; gap: 18px; }
+  .dataset-heading h2 { font-size: 18px; }
+  .benchmark-tabs { gap: 8px; }
+  .benchmark-tabs button { flex-basis: 200px; gap: 10px; padding: 14px; }
+  .dataset-arrow { display: none; }
+  #filter-controls { gap: 14px; flex-wrap: wrap; }
+  .search-field { flex-basis: 100%; }
+  .algorithm-column { position: sticky; left: 0; z-index: 1; border-right: 1px solid var(--line); }
+}
+@media (max-width: 680px) {
+  .dataset-strip { grid-template-columns: 1fr; gap: 16px; padding-block: 22px; }
+  .dataset-heading > p:last-child { display: none; }
+  .benchmark-tabs button { flex-basis: 100%; padding: 12px 14px; min-height: 70px; }
+  .benchmark-tabs small { font-size: 10px; }
+  .dataset-arrow { display: inline; }
+  #filters { padding: 14px; }
+  #filter-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .search-field { grid-column: 1 / -1; }
+  .search-field { min-width: 0; padding-inline: 10px; gap: 8px; }
+  .search-field input { font-size: 11px; }
+  .filter-label { flex: 1 1 38%; }
+  .filter-label select { max-width: none; width: 100%; }
+  .direction-button, .reset-button { min-height: 38px; padding: 6px 0; }
+  .direction-button { justify-self: start; }
+  .reset-button { justify-self: end; }
+  .board-context { display: grid; font-size: 9px; }
+  .algorithm-column { min-width: 150px; }
+}

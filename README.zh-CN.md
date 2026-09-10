@@ -28,7 +28,8 @@ Hugging Face 数据集和原始数据在确认再分发许可前应保持私有�
 3. 成功指标会写回 PR，机器人自动 squash merge；失败或不完整评测不会覆盖正式榜单。
    `benchmark.yml` 可手动触发完整或选定的重跑。
 4. ART 和 Eadro 的训练产物按算法 commit 缓存；数据版本变化后会使用新缓存并重新训练。
-5. 每个 datapack 使用独立日志和原子 `result.json`；中断后会复用已有有效结果继续运行。
+5. 每个 datapack 使用独立日志和原子 `result.json`；中断后按文件存在性跳过已有结果，
+   再由评测阶段检查有效性和完整性。
 6. `dataset-watch.yml` 每日检查受信任的 Hugging Face 仓库，发现新 revision 后生成确定性
    划分并创建可审计 PR；同一 PR 门禁会先完成指标评测。
 7. 指标校验后归档到 `results/history/`，更新 `results/leaderboard.json`，再由
@@ -93,6 +94,29 @@ rcabench-leaderboard download --config config/benchmark.json \
 rcabench-leaderboard normalize --adapter native \
   --config config/benchmark.json --snapshot .cache/datasets/fse
 ```
+
+## 代码结构与前端开发
+
+CLI 保留原有命令，执行逻辑按职责拆到 `src/rcabench_leaderboard/commands/`。
+计分、Docker 执行、训练缓存和结果格式保持不变。
+
+排行榜采用 [Benchmark Atlas](https://hamsterstation.github.io/benchmark-atlas/) 的
+米白与墨绿视觉风格，保留原生 HTML / CSS / JavaScript。`site/app.js` 负责交互编排，
+`site/lib/` 分离数据选择、URL 状态、格式化和 DOM 渲染，`site/styles/` 分离设计变量、
+页面布局和表格样式。部署仍是 GitHub Pages，无需 FastAPI、数据库或前端打包。
+
+```bash
+# 使用前面安装的 Python 环境；前端检查需要 Node.js 22+。
+pytest -q
+ruff check .
+rcabench-leaderboard build-site
+npm run check
+npm test  # Node 内置测试，无需 npm install。
+python -m http.server 8765 --bind 127.0.0.1 --directory site
+# 浏览器打开 http://localhost:8765/，不要直接双击 HTML。
+```
+
+模块职责、扩展位置和测试说明见 [`docs/ARCHITECTURE.zh-CN.md`](docs/ARCHITECTURE.zh-CN.md)。
 
 ## 新算法和新数据集
 
