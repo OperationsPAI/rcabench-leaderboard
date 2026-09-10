@@ -153,13 +153,56 @@ test("every published archive link resolves to an existing, matching immutable r
 });
 
 test("snapshot dates distinguish missing dates from UTC timestamps", () => {
-  assert.equal(formatDate(null), "更新时间未知");
-  assert.equal(formatDate("invalid"), "更新时间未知");
+  assert.equal(formatDate(null), "Update time unknown");
+  assert.equal(formatDate("invalid"), "Update time unknown");
   assert.equal(formatDate("2026-08-06T09:27:47Z"), "2026-08-06 09:27 UTC");
 });
 
 test("the static preview uses the same bytes as the published leaderboard", () => {
   assert.equal(readFileSync(new URL("site/data.json", root), "utf8"), readFileSync(new URL("results/leaderboard.json", root), "utf8"));
+});
+
+test("the public interface declares English and keeps static and dynamic copy in English", () => {
+  const page = readFileSync(new URL("site/index.html", root), "utf8");
+  assert.match(page, /<html lang="en">/);
+  assert.match(page, /<title>Algorithm Leaderboard/);
+  assert.match(page, /aria-label="Main navigation"/);
+  for (const path of ["site/index.html", "site/app.js", "site/lib/view.js",
+    "site/lib/leaderboard.js", "site/lib/format.js", "site/lib/location.js"]) {
+    assert.doesNotMatch(readFileSync(new URL(path, root), "utf8"), /\p{Script=Han}/u, path);
+  }
+});
+
+test("English controls, captions and empty states follow the selected board and ordering", () => {
+  const elements = new Map();
+  const document = {
+    getElementById(id) {
+      if (!elements.has(id)) elements.set(id, {
+        attributes: {},
+        setAttribute(name, value) { this.attributes[name] = value; },
+      });
+      return elements.get(id);
+    },
+    querySelectorAll() { return []; },
+  };
+  const view = createView(document);
+  view.initialize({ boards, generatedAt: published.generated_at });
+  assert.match(elements.get("scope-filter").innerHTML, /All scopes/);
+  assert.match(elements.get("scope-filter").innerHTML, /Test split/);
+  for (const currentBoard of boards) {
+    const state = readLocation(`?benchmark=${currentBoard.benchmark.id}`, boards);
+    view.render(boards, state);
+    const count = latestEntries(currentBoard).length;
+    assert.equal(elements.get("result-count").textContent, `Showing ${count} / ${count} algorithms`);
+    assert.equal(elements.get("table-caption").textContent, `${currentBoard.benchmark.title} service-level root cause analysis results`);
+    assert.equal(elements.get("sort-direction").textContent, "Descending ↓");
+    assert.match(elements.get("leaderboard-body").innerHTML, /archived metrics/);
+    view.render(boards, { ...state, sortDirection: "asc", query: "no-matching-algorithm" });
+    assert.equal(elements.get("sort-direction").attributes["aria-label"], "Ascending order; switch to descending");
+    assert.match(elements.get("leaderboard-body").innerHTML, /No matching algorithms/);
+    view.render([{ ...currentBoard, entries: [] }], state);
+    assert.match(elements.get("leaderboard-body").innerHTML, /No published results for this dataset yet/);
+  }
 });
 
 test("loading failures stop the busy status and keep controls disabled until recovery", () => {
@@ -181,7 +224,7 @@ test("loading failures stop the busy status and keep controls disabled until rec
   assert.equal(elements.get("results-panel").attributes["aria-busy"], "false");
   assert.equal(elements.get("load-error").hidden, false);
   assert.equal(elements.get("error-message").textContent, "HTTP 503");
-  assert.equal(elements.get("result-count").textContent, "结果加载失败");
+  assert.equal(elements.get("result-count").textContent, "Unable to load results");
   view.loading();
   assert.equal(elements.get("load-error").hidden, true);
   view.initialize({ boards, generatedAt: published.generated_at });
